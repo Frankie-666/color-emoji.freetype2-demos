@@ -23,34 +23,22 @@
       {
         /* nothing */
       }
-      else if ( a == GBLENDER_SHADE_COUNT-1 )
+      else if ( a == 255 )
       {
-        GDST_COPY_VAR
-        GDST_COPY(dst);
+        dst[0] = r;
+        dst[1] = g;
+        dst[2] = b;
       }
       else
       {
-        b = b * 255 / ra;
-        g = g * 255 / ra;
-        r = r * 255 / ra;
+        int ba = 255 - ra;
+        int br = dst[0];
+        int bb = dst[1];
+        int bg = dst[2];
 
-        {
-          GBLENDER_VARS(blender,color);
-
-          GBlenderPixel  back;
-
-          GDST_READ(dst,back);
-
-          GBLENDER_LOOKUP( blender, back );
-
-#ifdef GBLENDER_STORE_BYTES
-          GDST_STOREB(dst,_gcells,a);
-#else
-          GDST_STOREP(dst,_gcells,a);
-#endif
-
-          GBLENDER_CLOSE(blender);
-        }
+	dst[0] = br * ba / 255 + r;
+	dst[1] = bg * ba / 255 + g;
+	dst[2] = bb * ba / 255 + b;
      }
 
       src += 4;
